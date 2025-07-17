@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Qorely - Resignation Letter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #2c2f36, #1a1d23);
+      font-family: 'Merriweather', serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 text-gray-200">
+
+  <div class="max-w-3xl w-full bg-gray-800 border border-gray-700 shadow-lg rounded-lg p-8">
+    <!-- SIGNATURE GATE -->
+    <div id="signatureSection">
+      <h2 class="text-2xl font-semibold text-blue-300 mb-4 text-center">Sign to View Letter</h2>
+      <form id="signatureForm" class="space-y-4">
+        <input type="text" id="name" name="name" placeholder="Your Name" required
+          class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-gray-200 placeholder-gray-500" />
+        <input type="email" id="email" name="email" placeholder="Your Email" required
+          class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-gray-200 placeholder-gray-500" />
+
+        <!-- Anti-bot math check -->
+        <div class="flex items-center space-x-2">
+          <span id="captchaQ" class="text-sm text-gray-400"></span>
+          <input type="number" id="captchaAnswer" required placeholder="?" 
+            class="w-24 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-gray-100 placeholder-gray-500" />
+        </div>
+
+        <button type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition">Sign & View</button>
+      </form>
+      <p id="signedMessage" class="mt-3 text-green-400 hidden">✔️ Signature recorded. Revealing the letter...</p>
+      <p id="errorMessage" class="mt-3 text-red-400 hidden">⚠️ Please fill out all fields correctly.</p>
+    </div>
+
+    <!-- LETTER CONTENT -->
+    <div id="letterSection" class="mt-10 hidden space-y-6 fade-in">
+      <header class="space-y-2">
+        <p class="text-gray-400">Saikat Roy<br />Backend Developer, Qorely<br />Email: saikatroy71045@gmail.com<br />Date: 17 July 2025</p>
+        <p class="mt-4">To<br /><strong>The Team at Qorely</strong></p>
+        <h1 class="text-2xl text-blue-300 font-semibold">Subject: Formal Resignation and Strategic Pause of Qorely</h1>
+      </header>
+
+      <section class="space-y-4 leading-relaxed text-gray-300">
+        <p>Dear Team Qorely,</p>
+        <p>I am writing this letter with a heavy heart but a hopeful spirit. I, <strong>Saikat Roy</strong>, Backend Developer at Qorely, am officially resigning from my role...</p>
+        <p>Qorely has never been just a startup... We built more than a product—we built a vision. However, sometimes, in order to grow something truly great, we must step back, reflect, and strengthen our foundation.</p>
+
+        <p><em>&gt;&gt; Our Path Forward – Learning to Build Better</em><br />
+        <strong>Saikat Roy – Backend Developer</strong><br />
+        ● Pursuing B.Tech in Computer Science / IT<br />
+        ● Focus Areas: Data Structures, System Design, APIs, Cloud Infrastructure</p>
+
+        <p><strong>Riddhiman Ghosh – Designer</strong><br />
+        ● Degrees: B.Des Graphic Design, B.Sc Animation, Diploma Animation & Multimedia<br />
+        ● Focus Areas: UI/UX, Branding, Motion Design, Game Art</p>
+
+        <p><strong>Pratik Roy – Frontend Developer</strong><br />
+        ● NIIT Certified, Pursuing B.Tech<br />
+        ● Focus Areas: React, Next.js, Responsive Design, Performance Optimization</p>
+
+        <p>We are committed to this learning journey... Our next venture will not be just another startup; it will be a nation-building contribution.</p>
+
+        <p>Though Qorely rests for now, its mission continues within us. This is not a farewell—it is a preparation for the comeback.</p>
+
+        <p>With respect and determination,<br /><strong>Saikat Roy</strong><br />Backend Developer, Qorely</p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('signatureForm');
+    const letter = document.getElementById('letterSection');
+    const sigSection = document.getElementById('signatureSection');
+    const signedMessage = document.getElementById('signedMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // CAPTCHA logic
+    let correctAnswer = 0;
+    const a = Math.floor(Math.random() * 10 + 1);
+    const b = Math.floor(Math.random() * 10 + 1);
+    correctAnswer = a + b;
+    document.getElementById('captchaQ').textContent = `Are you human? What is ${a} + ${b} = `;
+
+    // Email Regex
+    const validEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMessage.classList.add('hidden');
+
+      const name = e.target.name.value.trim();
+      const email = e.target.email.value.trim();
+      const captcha = parseInt(e.target.captchaAnswer.value.trim(), 10);
+
+      if (!name || !validEmail(email) || captcha !== correctAnswer) {
+        errorMessage.classList.remove('hidden');
+        return;
+      }
+
+      await fetch('https://script.google.com/macros/s/AKfycbxza9Ph0YxTudHV9rhmQzt-pagBb7aP5Kpn6wiSn-_Kknqs0xcBey1kNtoF50kW8t2gYA/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
+      });
+
+      signedMessage.classList.remove('hidden');
+      setTimeout(() => {
+        sigSection.classList.add('hidden');
+        letter.classList.remove('hidden');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
